@@ -29,13 +29,14 @@ from marker.postprocessors.markdown import merge_spans, merge_lines, get_full_te
 from marker.cleaners.text import cleanup_text
 from marker.images.extract import extract_images
 from marker.images.save import images_to_dict
-
+from io import BytesIO
 from typing import List, Dict, Tuple, Optional
 from marker.settings import settings
 
 
 def convert_single_pdf(
         fname: str,
+        pdf_bytes_stream: BytesIO,
         model_lst: List,
         max_pages: int = None,
         start_page: int = None,
@@ -53,7 +54,8 @@ def convert_single_pdf(
     validate_langs(langs)
 
     # Find the filetype
-    filetype = find_filetype(fname)
+    #filetype = find_filetype(fname)
+    filetype = "pdf"
 
     # Setup output metadata
     out_meta = {
@@ -65,9 +67,9 @@ def convert_single_pdf(
         return "", {}, out_meta
 
     # Get initial text blocks from the pdf
-    doc = pdfium.PdfDocument(fname)
+    doc = pdfium.PdfDocument(pdf_bytes_stream)
     pages, toc = get_text_blocks(
-        doc,
+        pdf_bytes_stream,
         fname,
         max_pages=max_pages,
         start_page=start_page
