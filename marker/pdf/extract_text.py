@@ -52,8 +52,8 @@ def _get_pages(pdf_bytes_stream, model=None, page_range=None, workers=None):
 
     pages_per_worker = math.ceil(len(page_range) / workers)
     page_range_chunks = [page_range[i * pages_per_worker:(i + 1) * pages_per_worker] for i in range(workers)]
-    with ProcessPoolExecutor(max_workers=workers) as executor:
-        pages = list(executor.map(func, page_range_chunks))
+    #with ProcessPoolExecutor(max_workers=workers) as executor:
+    pages = list(map(func, page_range_chunks))
     ordered_pages = [page for sublist in pages for page in sublist]
 
     return ordered_pages

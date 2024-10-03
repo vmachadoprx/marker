@@ -112,8 +112,8 @@ def surya_recognition(doc, page_idxs, langs: List[str], rec_model, pages: List[P
 
 def tesseract_recognition(doc, page_idxs, langs: List[str]) -> List[Optional[Page]]:
     pdf_pages = generate_single_page_pdfs(doc, page_idxs)
-    with ThreadPoolExecutor(max_workers=settings.OCR_PARALLEL_WORKERS) as executor:
-        pages = list(executor.map(_tesseract_recognition, pdf_pages, repeat(langs, len(pdf_pages))))
+    #with ThreadPoolExecutor(max_workers=settings.OCR_PARALLEL_WORKERS) as executor:
+    pages = list(map(_tesseract_recognition, pdf_pages, repeat(langs, len(pdf_pages))))
 
     return pages
 
